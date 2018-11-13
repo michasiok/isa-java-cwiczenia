@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Game {
     public static void main(String[] args) {
+        System.out.println("Podaj rozmiar planszy: ");
         int size = getSize();
         char[][] gameBoard = newGameBoard(size);
         boolean isX = true;
@@ -114,39 +115,52 @@ public class Game {
     }
 
     static boolean checkColumns(char[][] board, int iter) {
-        if (board[iter][0] == board[iter][1] && board[iter][1] == board[iter][2] && board[iter][2] != '_') {
-            return true;
-        } else {
-            return false;
+
+        boolean equals = false;
+        char first = board[iter][0];
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][iter] == first && board[i][iter] != '_') {
+                equals = true;
+            } else {
+                equals = false;
+            }
         }
+        return equals;
     }
 
 
     static boolean checkRows(char[][] board, int iter, int size) {
+        boolean equals = false;
         char first = board[0][iter];
-        for (int i = 1; i < size; i++) {
-            if ((board[i][iter] != first) ) {
-                return false;
+        for (int i = 0; i < board.length; i++) {
+            if (board[iter][i] == first && board[iter][i] != '_') {
+                equals = true;
+            } else {
+                equals = false;
             }
-        return  true;
         }
-
-       return true;
-//            if (board[0][iter] == board[1][iter] && board[1][iter] == board[2][iter] && board[2][iter] != '_') {
-//            return true;
-//            } else {
-//                return false;
-//            }
+        return equals;
     }
 
     static boolean checkDiagonals(char[][] board) {
-        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] != '_') {
-            return true;
-        } else if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] != '_') {
-            return true;
-        } else {
-            return false;
+        for (int x = 0; x < 2; x++) {
+            boolean equals = false;
+            char first = board[0][0];
+            if (x == 1) {
+                first = board[board.length - 1][0];
+            }
+            for (int i = 0; i < board.length; i++) {
+                if (board[i][i] == first && board[i][i] != '_') {
+                    equals = true;
+                } else {
+                    equals = false;
+                }
+            }
+            if (equals) {
+                return true;
+            }
         }
+        return false;
     }
 
     static void printWinner(boolean isPlayerX) {
