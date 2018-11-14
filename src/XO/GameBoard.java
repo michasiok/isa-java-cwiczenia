@@ -1,66 +1,78 @@
 package XO;
 
 public class GameBoard {
-    private char[][] board;
+    public Mark[][] board;
     private int size;
 
     public GameBoard(int size) {
         this.size = size;
-        this.board = new char[size][size];
+        this.board = new Mark[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                this.board[i][j] = '_';
+                this.board[i][j] = Mark.EMPTY;
             }
         }
     }
 
-    public void printBoard() {
-        for (int i = 1; i <= size; i++) {
-            System.out.print(" " + i);
-        }
-        System.out.println(" X");
-        for (int j = 0; j < size; j++) {
-            System.out.print(j + 1);
-            for (int i = 0; i < size; i++) {
-                System.out.print(board[j][i] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("Y");
+    private void setMark(int[] coords, Player activePlayer) {
+
+        board[coords[1] - 1][coords[0] - 1] = activePlayer.getMark();
     }
 
-    private void setX(int xCoord, int yCoord) {
-            this.board[yCoord - 1][xCoord - 1] = 'X';
-    }
 
-    private void setO(int xCoord, int yCoord) {
-        this.board[yCoord - 1][xCoord - 1] = 'O';
-    }
-
-    private boolean isCellAvailable(int xCoord, int yCoord) {
-        if (board[yCoord-1][xCoord - 1] == '_') {
+    private boolean isCellAvailable(int[] coords) {
+        if (board[coords[1] - 1][coords[0] - 1] == Mark.EMPTY) {
             return true;
         } else {
             return false;
         }
     }
-    private boolean isCoordValid(int xCoord, int yCoord) {
-            if (0 < xCoord && xCoord <= size) {
-                return true;
-            } else {
-                return false;
-            }
-    }
-    public boolean makeMove(int xCoord, int yCoord, char symbol){
-        if(isCoordValid(xCoord, yCoord) && isCellAvailable(xCoord, yCoord)){
-            if(symbol == 'X'){
-                setX(xCoord,yCoord);
-            } else {
-                setO(xCoord, yCoord);
-            }
+
+    private boolean isCoordValid(int[] coords) {
+        if ((0 < coords[0] && coords[0] <= size) && (0 < coords[1] && coords[1] <= size)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+
+    public boolean makeMove(int[] coords, Player player) {
+        if (isCoordValid(coords) && isCellAvailable(coords)) {
+            setMark(coords, player);
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+
+    public String toString() {
+        String boardString = "";
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                switch (board[i][j]) {
+                    case X:
+                        boardString += "X ";
+                        break;
+                    case O:
+                        boardString += "O ";
+                        break;
+                    case EMPTY:
+                        boardString += "_ ";
+                        break;
+                }
+            }
+            boardString += '\n';
+        }
+        return boardString;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Mark[][] getBoard() {
+        return board;
+    }
 }
+
